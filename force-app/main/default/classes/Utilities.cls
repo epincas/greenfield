@@ -14,9 +14,6 @@ public class Utilities {
     // ------------------------------------------------------------------------------------
     // Method's name: cloneRecords();
     // Description:     
-    //    @params       []
-    //    @invoked from []
-    //    @return       [] 
     // ------------------------------------------------------------------------------------   
     public static List<sObject> cloneRecords(List<sObject> recordsLst){
         List<sObject> clonedrecords = new List<sObject>();
@@ -31,9 +28,6 @@ public class Utilities {
     // ------------------------------------------------------------------------------------
     // Method's name: getAllFieldsForSObject(Id recordId);
     // Description:     
-    //    @params       []
-    //    @invoked from []
-    //    @return       [] 
     // ------------------------------------------------------------------------------------  
     public static String getAllFieldsForSObject(Id recordId){
         String fieldNames;
@@ -42,4 +36,15 @@ public class Utilities {
      
         return fieldNames;
     }  
+    // ------------------------------------------------------------------------------------
+    // Method's name: removeDuplicatesFromList();
+    // Description:     
+    // ------------------------------------------------------------------------------------ 
+    public static List<Case> removeDuplicatesFromList(List<Case> myInboundList){
+        Set<Case> mySetWithoutDupes = new Set<Case>();
+		List<Case> myResultingList = new List<Case>(); 
+        mySetWithoutDupes.addAll(myInboundList);
+        myResultingList.addAll(mySetWithoutDupes);
+        return myResultingList;
+    } 
 }

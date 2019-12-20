@@ -25,8 +25,8 @@ public class DataFactoryForTests {
                                          Subject='Test Parent Case #: '+i);
             parentCasesLst.add(myParentCase);
         }  
-    return parentCasesLst;
-}
+        return parentCasesLst;
+    }
     
     // ------------------------------------------------------------------------------------
     // Method's name: addChildrenToParentCasesWithStatusDiffClosed

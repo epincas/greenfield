@@ -42,7 +42,8 @@ public class CaseTest {
         List<Case> parentCasesLst = DataFactoryForTests.createParentCase(numParentCases);
         insert parentCasesLst;
         Set<Id> parentId = (new Map <Id,Case>(parentCasesLst)).keySet();
-        Map<Id, List<Case>> parentWithChildrenCasesMap = DataFactoryForTests.addChildrenToParentCasesWithStatusDiffClosed(parentId,numchildrenCases);
+        Map<Id, List<Case>> parentWithChildrenCasesMap = 
+            DataFactoryForTests.addChildrenToParentCasesWithStatusDiffClosed(parentId,numchildrenCases);
         List<Case> childrenCasesLst = New List<Case>(); 
         for(List<Case> eachLstOfCase : parentWithChildrenCasesMap.values()){
             childrenCasesLst.addAll(eachLstOfCase);
@@ -74,10 +75,12 @@ public class CaseTest {
     // --------------------------------------------------------------------------------------    
     @isTest static void updateParentCaseWithStatusEqualClosed(){
         List<Case> parentCasesLst = DataFactoryForTests.createParentCase(numParentCases);
-        List<Case> ParentCasesToBeUpdatedLst = new List<Case>();
+        List<Case> parentCasesToBeUpdatedLst = new List<Case>();
         insert parentCasesLst;
         Set<Id> parentId = (new Map <Id,Case>(parentCasesLst)).keySet();
-        Map<Id, List<Case>> parentWithChildrenCasesMap = DataFactoryForTests.addChildrenToParentCasesWithStatusDiffClosed(parentId,numchildrenCases);
+        Map<Id, List<Case>> parentWithChildrenCasesMap = 
+            DataFactoryForTests.addChildrenToParentCasesWithStatusDiffClosed(parentId,numchildrenCases);
+        
         List<Case> childrenCasesLst = New List<Case>(); 
         for(List<Case> eachLstOfCase : parentWithChildrenCasesMap.values()){
             childrenCasesLst.addAll(eachLstOfCase);
@@ -85,9 +88,9 @@ public class CaseTest {
         insert childrenCasesLst;
         for(Case eachParentCase : parentCasesLst){
             eachParentCase.Status = 'Closed';
-            ParentCasesToBeUpdatedLst.add(eachParentCase);
+            parentCasesToBeUpdatedLst.add(eachParentCase);
         }
-        update ParentCasesToBeUpdatedLst;
+        update parentCasesToBeUpdatedLst;
         List<Case> queriedChildrenUpdatedCases = [SELECT IsClosed
                                                   FROM Case
                                                   WHERE ParentId IN:parentWithChildrenCasesMap.KeySet()];
@@ -102,39 +105,60 @@ public class CaseTest {
         System.assertEquals(true, childCaseIsClosed, 'Assertion error: Children Cases are NOT all Closed- They should');  
     }
     
-/*
-// -------------------------------------------------------------------------------------
-// Method's name: deleteChildCases();  
-// Description:  Step 1: create a new Parent Case with a Status different to Closed.
-//               Step 2: create various Children Cases with a Status different to Closed.
-//               Step 3: delete various Children Cases.   
-// Expected Result: on the Parent Case, the Children Cases # = n; (n = num remaining children)     
-// ------------------------------------------------------------------------------------- 
-@isTest static void deleteChildCases(){
-Map<Id, List<Case>> parentAndChildrenCasesMap = DataFactoryForTests.addChildrenToParentCasesWithStatusDiffClosed(numParentCases,numchildrenCases);
-List<Case> parentCases = [SELECT Id, (SELECT Id FROM Cases)
-FROM Case
-WHERE Id IN: parentAndChildrenCasesMap.keySet()];
-List<Case> childrenCasesToDelete = new List<Case>();
-for (Case eachParentCase : parentCases){
-Integer r = calcRandomNumber(numchildrenCases);
-for(Integer i=0; i<r; i++){
-childrenCasesToDelete.add(eachParentCase);
-}
-}
-delete childrenCasesToDelete;
-
-List<Case> parentCasesAfterDeletingChildrenCases = [SELECT Id, (SELECT Id FROM Cases)
-FROM Case
-WHERE Id IN: parentAndChildrenCasesMap.keySet()];
-Boolean correctChildrenCasesNumber = true;
-for(Case eachParentCaseAfterDeleting : parentCasesAfterDeletingChildrenCases){
-correctChildrenCasesNumber = (eachParentCaseAfterDeleting.Children_Cases_Num__c != eachParentCaseAfterDeleting.Cases.size())? false: true;
-}
-
-System.assertEquals(true, correctChildrenCasesNumber,'Assertion error: Case.Children_Cases_Num__c is NOT correct after deleting children');
-}  
-
+    
+    // -------------------------------------------------------------------------------------
+    // Method's name: deleteChildCases();  
+    // Description:  Step 1: create a new Parent Case with a Status different to Closed.
+    //               Step 2: create various Children Cases with a Status different to Closed.
+    //               Step 3: delete various Children Cases.   
+    // Expected Result: on the Parent Case, the Children Cases # = n; (n = num remaining children)     
+    // ------------------------------------------------------------------------------------- 
+    @isTest static void deleteChildCases(){
+        List<Case> parentCasesLst = DataFactoryForTests.createParentCase(numParentCases);
+        insert parentCasesLst;
+        Set<Id> parentId = (new Map <Id,Case>(parentCasesLst)).keySet();
+        Map<Id, List<Case>> parentWithChildrenCasesMap = 
+            DataFactoryForTests.addChildrenToParentCasesWithStatusDiffClosed(parentId,numchildrenCases);
+        System.debug('Tamaño del mapa de Padres e Hijos: '+parentWithChildrenCasesMap.size());
+        // BUENA NOTICIA: Devuelve 5
+        List<Case> childrenCasesLst = New List<Case>(); 
+        for(List<Case> eachLstOfCase : parentWithChildrenCasesMap.values()){
+            childrenCasesLst.addAll(eachLstOfCase);
+        }
+        insert childrenCasesLst;
+        
+        List<Case> childrenCasesToDelete = new List<Case>();
+        for(Case eachParentCase : parentCasesLst){
+            Integer r = calcRandomNumber(numchildrenCases);
+            for(Integer i=0; i<r; i++){
+                childrenCasesToDelete.add(eachParentCase);
+            } 
+        }
+        List<Case> childrenCasesWithoutDuplicatesToDelete = 
+            Utilities.removeDuplicatesFromList(childrenCasesToDelete);
+        delete childrenCasesWithoutDuplicatesToDelete;
+        
+        List<Case> parentCasesAfterDeletingChildrenCases = [SELECT Id, Children_Cases_Num__c, (SELECT Id FROM Cases)
+                                                            FROM Case
+                                                            WHERE Id IN: parentWithChildrenCasesMap.keySet()];
+        // PROBLEMA --> parentCasesAfterDeletingChildrenCases.size() = 0
+        System.debug('parentCasesAfterDeletingChildrenCases.size(): '+parentCasesAfterDeletingChildrenCases.size());
+        
+        Boolean correctChildrenCasesNumber = true;
+        if(parentCasesAfterDeletingChildrenCases.size() != numParentCases){
+            correctChildrenCasesNumber = false; 
+        } else {
+            for(Case eachParentCaseAfterDeleting : parentCasesAfterDeletingChildrenCases){
+                if(eachParentCaseAfterDeleting.Children_Cases_Num__c != eachParentCaseAfterDeleting.Cases.size()){
+                    correctChildrenCasesNumber = false;
+                }
+            }  
+        }
+        System.assertEquals(true, 
+                            correctChildrenCasesNumber,
+                            'Assertion error: Case.Children_Cases_Num__c is NOT correct after deleting children');
+    }  
+    /*
 // -------------------------------------------------------------------------------------
 // Method's name: cloneParentCaseWithChildren();  
 // Description: Clone/Create a new Parent Case where field Children Case # = n.  
@@ -162,15 +186,15 @@ correctChildrenCasesNumber = (eachUpdatedClonedCase.Children_Cases_Num__c != 0)?
 }
 System.assertEquals(true, correctChildrenCasesNumber, 'Assertion error: the field eachUpdatedClonedCase.Children_Cases_Num__c should be zero');
 }
-
-
-// -------------------------------------------------------------------------------------
-// Method's name: calcRandomNumber();  
-// Description:  calculates a random number within the range of numchildrenCases  
-// -------------------------------------------------------------------------------------
-static Integer calcRandomNumber(Integer numchildrenCases){
-Integer randomNumber = Integer.valueOf((Math.random() * numchildrenCases));
-return randomNumber;
-}
 */
+    
+    // -------------------------------------------------------------------------------------
+    // Method's name: calcRandomNumber();  
+    // Description:  calculates a random number within the range of numchildrenCases  
+    // -------------------------------------------------------------------------------------
+    static Integer calcRandomNumber(Integer numchildrenCases){
+        Integer randomNumber = Integer.valueOf((Math.random() * numchildrenCases));
+        return randomNumber;
+    }
+    
 }
