@@ -20,7 +20,6 @@ public class CaseTest {
     // Expected Result: Children Cases # = 0;     
     // --------------------------------------------------------------------------------------
     @isTest static void insertParentCaseWithStatusDiffClosed(){
-        //Testing git
         List<Case> parentCasesLst = DataFactoryForTests.createParentCase(numParentCases);
         insert parentCasesLst;
         List<Case> queriedCases = [SELECT Children_Cases_Num__c
@@ -76,41 +75,30 @@ public class CaseTest {
     @isTest static void updateParentCaseWithStatusEqualClosed(){
         List<Case> parentCasesLst = DataFactoryForTests.createParentCase(numParentCases);
         List<Case> ParentCasesToBeUpdatedLst = new List<Case>();
-        
         insert parentCasesLst;
         Set<Id> parentId = (new Map <Id,Case>(parentCasesLst)).keySet();
         Map<Id, List<Case>> parentWithChildrenCasesMap = DataFactoryForTests.addChildrenToParentCasesWithStatusDiffClosed(parentId,numchildrenCases);
-        
         List<Case> childrenCasesLst = New List<Case>(); 
         for(List<Case> eachLstOfCase : parentWithChildrenCasesMap.values()){
             childrenCasesLst.addAll(eachLstOfCase);
         }
-        
         insert childrenCasesLst;
-        
-        
         for(Case eachParentCase : parentCasesLst){
             eachParentCase.Status = 'Closed';
             ParentCasesToBeUpdatedLst.add(eachParentCase);
         }
-        
         update ParentCasesToBeUpdatedLst;
-        
-        
-        
         List<Case> queriedChildrenUpdatedCases = [SELECT IsClosed
                                                   FROM Case
                                                   WHERE ParentId IN:parentWithChildrenCasesMap.KeySet()];
         
         Boolean childCaseIsClosed = true;
-        
         for(Case eachUpdatedChildCase : queriedChildrenUpdatedCases){
             if(!eachUpdatedChildCase.IsClosed){
                 
                 childCaseIsClosed = false;   
             }
         }
-        
         System.assertEquals(true, childCaseIsClosed, 'Assertion error: Children Cases are NOT all Closed- They should');  
     }
     
