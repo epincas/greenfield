@@ -18,7 +18,7 @@ public class DummyDataFactory {
         List<Account> deteledAccounts = [SELECT Id FROM Account WHERE Name ='Testxyz009'];
         System.debug('Queried Acc from first test method (before deleting) '+deteledAccounts);
     }
-    // SECOND TEST METHOD NEEDING THE CREATED RECORDS +
+    // SECOND TEST METHOD NEEDING THE CREATED RECORDS
     @isTest static void displayRecord(){
         List<Account> qryMethod = [SELECT Id, Name FROM Account];  
         System.debug('Query from a third method: '+qryMethod);
