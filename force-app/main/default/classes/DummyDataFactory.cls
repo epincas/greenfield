@@ -10,7 +10,7 @@ public class DummyDataFactory {
         List<Account> acctsInserted = [SELECT Id, Name FROM Account WHERE Name ='Testxyz009'];
         System.debug('Account inserted from the testSetup method: '+acctsInserted);
     }
-    // FIRST TEST METHOD DELETING RECORD
+    // FIRST TEST METHOD DELETING RECORD [Test]
     @isTest static void deleteRecords(){
         List<Account> AcctsToDelete = [SELECT Id, Name FROM Account WHERE Name ='Testxyz009'];
         System.debug('Queried Acc from first test method (before deleting)'+AcctsToDelete);
