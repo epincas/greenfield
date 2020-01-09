@@ -1,7 +1,7 @@
 /** 
 * File Name: CaseTest.apxc
 * Description: performs tests on all potential scenarios around the Case sObject
-* @author:     Ted Pincas
+* @author:     Ted Pincas [testing git]
 * Modification Log 
 * ========================================================================================= 
 * Ver Date          Author              Modification 
