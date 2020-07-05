@@ -1,23 +1,23 @@
-/** 
+/**
 * File Name:   CaseProcesses.apxc
 * Description: It verifies a set of criteria on each inbound Case and invokes different
 *              processes depending on such criteria.
 * @author:     Ted Pincas
 
-* Modification Log 
-* ========================================================================================= 
-* Ver Date          Author              Modification 
+* Modification Log
+* =========================================================================================
+* Ver Date          Author              Modification
 * --- ----------    ------              -------------
 * 01 22/11/2019     Ted Pincas          Creation
 * =========================================================================================
 **/
 public class CaseProcesses {
     // -------------------------------------------------------------------------------------
-    // Method's name: calcNumChildrenOnParentCase  
-    // Description:   Calculates the number of Children on a Parent Case;  
+    // Method's name: calcNumChildrenOnParentCase
+    // Description:   Calculates the number of Children on a Parent Case;
     //    @params       [Set<Id> childrenCasesParentIDsToCount]
     //    @invoked from [CaseTriggerHandler.afterInsert()]
-    //    @return       [void (It only verifies the new size of the list of children Cases)] 
+    //    @return       [void (It only verifies the new size of the list of children Cases)]
     // --------------------------------------------------------------------------------------
     public static void calcNumChildrenOnParentCase(Set<Id> parentIDs){
         List<Case> parentCasesToUpdateWithCounter = new List<Case>();
@@ -31,14 +31,14 @@ public class CaseProcesses {
         }
         update parentCasesToUpdateWithCounter;
     }
-    
+
     // -------------------------------------------------------------------------------------
-    // Method's name: closeAllChildren  
+    // Method's name: closeAllChildren
     // Description:   Closes all the Children Cases of each Parent Case if that Parent Case's
-    //                status is 'Closed'; 
+    //                status is 'Closed';
     //    @params       [the Id of the Parent Case]
     //    @invoked from [CaseTriggerHandler.afterUpdate()]
-    //    @return       [void (it only updates the childrend Cases by changing the Status to Closed)] 
+    //    @return       [void (it only updates the childrend Cases by changing the Status to Closed)]
     // --------------------------------------------------------------------------------------
     public static void closeChildren(Set<Id> closedParentCasesIDs){
         List<Case> closedChildrenCasesToBeUpdated = new List<Case>();
@@ -53,5 +53,5 @@ public class CaseProcesses {
             }
         }
         update closedChildrenCasesToBeUpdated;
-    }  
+    }
 }
