@@ -13,7 +13,7 @@
 **/
 public class CaseProcesses {
     // -------------------------------------------------------------------------------------
-    // Method's name: calcNumChildrenOnParentCase 
+    // Method's name: calcNumChildrenOnParentCase
     // Description:   Calculates the number of Children on a Parent Case; (additional info)
     //    @params       [Set<Id> childrenCasesParentIDsToCount]
     //    @invoked from [CaseTriggerHandler.afterInsert()]
