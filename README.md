@@ -1,7 +1,7 @@
 # Exercises to practice Apex
 
 ### Challenge # 1:
-Create a counter field on the Case standard Sobject that will count and display its number of associated children cases. 
+Create a counter field on the Case standard sObject that will count and display its number of associated children cases. 
 When a new child case is added to the a parent case, the counter field should automatically be updated (same behaviour when a child case is removed from that parent).
 
 ### Challenge # 2:
