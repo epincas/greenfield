@@ -8,11 +8,11 @@ public class MyDummyController{
         }
         private set;
     }
-    
+
     public String getMyString(){
         return 'getMyString';
     }
-    
+
     public String getStringMethod(){
         if(myString == null){
             myString = 'b';
