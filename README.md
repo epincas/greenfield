@@ -19,9 +19,8 @@ Allow a System Admin to add as many Keywords as needed in a Custom Metadata Type
 
 ### Challenge # 4 (pending to implement):
 When a Case with Origin = Email-2-Case or Web-2-Case is inserted in Salesforce, automatically respond the sender with an email based on a Lightning Email Template on the following deadlines:
-- If the Case.Type = abc (Inquiry) ==> fire an response email message immediately with a specific note including the work "Inquiry";
+- If the Case.Type = Inquiry ==> fire a response email message immediately with a specific note including the word "Inquiry" (like "thank you for your Inquiry";
   If Case.Status != Responded OR Closed, send another scheduled email message 2 Business Days after the Case.CreatedDate;
-- If the Case.Type = xyz (Complaint) ==> fire an response email message immediately;
-  If Case.Status != Responded OR Closed, send another scheduled email message 5 Business Days after the Case.CreatedDate;
+- If the Case.Type = Complaint ==> fire a response email message immediately; If Case.Status != Responded OR Closed, send another scheduled email message 5 Business Days after the Case.CreatedDate;
 
 
