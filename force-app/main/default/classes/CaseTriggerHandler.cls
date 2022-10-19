@@ -62,8 +62,6 @@ public class CaseTriggerHandler {
             if (eachInboundCase.ParentId != null){
                 this.parentIDsToRecalculate.add(eachInboundCase.ParentId);
             }
-            else if (eachInboundCase.Cases.Size()== 0){
-            }
         }
     }
 
