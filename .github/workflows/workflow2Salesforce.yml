@@ -1,5 +1,7 @@
 # TUTORIAL OF YML LANGUAGE/SYNTAX HERE: https://learnxinyminutes.com/docs/yaml/ 
 
+# Salesforce instructions: https://developer.salesforce.com/blogs/2020/01/using-salesforce-dx-with-github-actions 
+
 # This is a basic workflow to help you get started with Actions
 
 name: CI
