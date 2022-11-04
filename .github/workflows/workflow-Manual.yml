@@ -1,2 +1,0 @@
-on:
-  workflow_dispatch: "Mandar a SF"
