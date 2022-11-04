@@ -1,0 +1,37 @@
+# Unique name for this workflow
+name: Manually deploy to SF
+
+# Workflow starts when clicking a button
+on: workflow_dispatch
+
+# Jobs to be executed
+jobs:
+  deploy-and-test:
+    runs-on: ubuntu-latest
+
+    steps:
+      # Install Salesforce CLI
+      - name: "Install Salesforce CLI"
+        run: |
+          wget https://developer.salesforce.com/media/salesforce-cli/sfdx/channels/stable/sfdx-linux-x64.tar.xz
+          mkdir ~/sfdx
+          tar xJf sfdx-linux-x64.tar.xz -C ~/sfdx --strip-components 1
+          echo "$HOME/sfdx/bin" >> $GITHUB_PATH
+          ~/sfdx/bin/sfdx version
+
+      # dowload the source code to Virtual Machine
+      - name: "Checkout source code"
+        uses: actions/checkout@v2 # to be investigated (it dowloads my code from github into the ubuntu virtual machine)
+
+      # Store secret for Dev Org
+      - name: "Populate auth file with DEV_ORG_URL secret"
+        shell: bash
+        run: echo ${{ secrets.DEV_ORG_URL}} > ./DEV_ORG_URL.txt
+
+      # Authenticate dev Org
+      - name: "Authenticate Dev Org"
+        run: sfdx auth:sfdxurl:store -f ./DEV_ORG_URL.txt -a devhub -d
+
+      # Remove auth file
+      - name: "Remove auth file"
+        run: rm -f ./DEV_ORG_URL.txt
